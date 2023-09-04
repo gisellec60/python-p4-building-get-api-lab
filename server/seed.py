@@ -6,7 +6,6 @@ from faker import Faker
 
 from app import app
 from models import db, Bakery, BakedGood
-from datetime import date  
 
 fake = Faker()
 
@@ -19,7 +18,8 @@ with app.app_context():
     for i in range(20):
         b = Bakery(
             name=fake.company(),
-            created_at=fake.date_this_month(after_today=True)
+            created_at=fake.date_this_month(after_today=True),
+            updated_at=fake.date_this_month(after_today=True)
         )
         bakeries.append(b)
     
@@ -38,6 +38,7 @@ with app.app_context():
             name=name,
             price=randint(1,10),
             created_at=fake.date_this_month(after_today=True),
+            updated_at=fake.date_this_month(after_today=True),
             bakery=rc(bakeries)
         )
 

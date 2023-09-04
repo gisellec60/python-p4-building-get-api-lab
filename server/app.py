@@ -22,27 +22,25 @@ def index():
 def bakeries():
     bakery = []
     for baker in Bakery.query.all():
-        baker_dic = {
-            "id":baker.id,
-            "name":baker.name,
-            "created_at":baker.created_at
         
-           }
-        bakery.append(baker_dic)
+        bakery_dic = baker.to_dict()
+        bakery.append(bakery_dic)
+
     response = make_response(jsonify(bakery),200)
 
+    response.headers["Content-Type"] = "application/json"
+   
     return response
 
 @app.route('/bakeries/<int:id>')
 def bakery_by_id(id):
     bakery = Bakery.query.filter(Bakery.id == id).first()
     
-    bakery_dict = {
-        "id": bakery.id,
-        "name":bakery.name,
-        "created_at":bakery.created_at
-    }
-    response = make_response(bakery_dict, 200)
+    bakery_dict = bakery.to_dict()
+
+    response = make_response(jsonify(bakery_dict), 200)
+
+    response.headers["Content-Type"] = "application/json"
 
     return response
 
@@ -54,34 +52,24 @@ def baked_goods_by_price():
     baked_goods =  BakedGood.query.order_by(BakedGood.price).all() 
       
     for baked in baked_goods:  
-        baked_dict = {
-            "id": baked.id,
-            "name":baked.name,
-            "price":baked.price,
-            "created_at":baked.created_at
-        }
-        baked_list.append(baked_dict)
+
+        baked_dic = baked.to_dict()
+        baked_list.append(baked_dic)
 
     response = make_response(jsonify(baked_list), 200)
+
+    response.headers["Content-Type"] = "application/json" 
 
     return response
 
 @app.route('/baked_goods/most_expensive')
 def most_expensive_baked_good():
      
-    baked_list = []
-     
-    baked_goods =  BakedGood.query.order_by(BakedGood.price.desc()).limit(1).all() 
-    
-    for baked in baked_goods:  
-        baked_dict = {
-            "id": baked.id,
-            "name":baked.name,
-            "price":baked.price
-        }
-        baked_list.append(baked_dict)
+    baked_goods =  BakedGood.query.order_by(BakedGood.price.desc()).limit(1).first() 
+  
+    baked_dict = baked_goods.to_dict()
 
-    response = make_response(jsonify(baked_list), 200)
+    response = make_response(jsonify(baked_dict), 200)
 
     return response
 
