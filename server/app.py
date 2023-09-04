@@ -4,6 +4,7 @@ from flask import Flask, make_response, jsonify
 from flask_migrate import Migrate
 
 from models import db, Bakery, BakedGood
+import json
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
@@ -22,11 +23,13 @@ def index():
 def bakeries():
     bakery = []
     for baker in Bakery.query.all():
-        
+
         bakery_dic = baker.to_dict()
         bakery.append(bakery_dic)
-
-    response = make_response(jsonify(bakery),200)
+    
+    #make json more readable 
+    json_str = json.dumps(bakery, indent=4)
+    response = make_response(json_str,200)
 
     response.headers["Content-Type"] = "application/json"
    
@@ -38,7 +41,9 @@ def bakery_by_id(id):
     
     bakery_dict = bakery.to_dict()
 
-    response = make_response(jsonify(bakery_dict), 200)
+    json_str = json.dumps(bakery_dict, indent=4)
+    
+    response = make_response(json_str, 200)
 
     response.headers["Content-Type"] = "application/json"
 
@@ -56,7 +61,9 @@ def baked_goods_by_price():
         baked_dic = baked.to_dict()
         baked_list.append(baked_dic)
 
-    response = make_response(jsonify(baked_list), 200)
+    json_str = json.dumps(baked_list, indent=4)
+   
+    response = make_response(json_str, 200)
 
     response.headers["Content-Type"] = "application/json" 
 
@@ -69,8 +76,12 @@ def most_expensive_baked_good():
   
     baked_dict = baked_goods.to_dict()
 
-    response = make_response(jsonify(baked_dict), 200)
+    json_str = json.dumps(baked_dict, indent=4)
 
+    response = make_response(json_str, 200)
+
+    response.headers["Content-Type"] = "application/json" 
+    
     return response
 
 if __name__ == '__main__':
