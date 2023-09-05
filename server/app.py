@@ -9,7 +9,7 @@ import json
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.json.compact = True
+app.json.compact = False
 
 migrate = Migrate(app, db)
 
@@ -28,8 +28,8 @@ def bakeries():
         bakery.append(bakery_dic)
     
     #make json more readable 
-    json_str = json.dumps(bakery, indent=4)
-    response = make_response(json_str,200)
+    # json_str = json.dumps(bakery, indent=4)
+    response = make_response(jsonify(bakery),200)
 
     response.headers["Content-Type"] = "application/json"
    
@@ -81,7 +81,7 @@ def most_expensive_baked_good():
     response = make_response(json_str, 200)
 
     response.headers["Content-Type"] = "application/json" 
-    
+
     return response
 
 if __name__ == '__main__':
